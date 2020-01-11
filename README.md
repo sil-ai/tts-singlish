@@ -9,6 +9,7 @@ After ensuring that you have the [pre-requisites](#pre-requisites), complete the
 1. [Prepare the input repository](#prepare_input_repository)
 2. [Select a speaker and pre-process the corresponding data]()
 3. [Train the TTS model]()
+4. [Try using the TTS model to synthesize speech]()
 
 ## Pre-requisites
 
@@ -120,6 +121,40 @@ NAME                TYPE SIZE
 ```
 
 ## 3. Train the TTS model
+
+The data is now ready for training. We will utilize [Mozilla's implementation of Tacotron2](https://github.com/mozilla/TTS) to perform our training and inference. We will also start from [one of their pre-trained models](https://github.com/mozilla/TTS/wiki/Released-Models) as our base model (which will reduce training time drastically).
+
+We will need the [config file](config.json) for training, so let's go ahead and upload that into a Pachdyerm repo:
+
+```sh
+$ pachctl create repo config
+
+$ pachctl put file config@master:/config.json -f config.json
+
+$ pachctl list file config@master:/config.json
+NAME         TYPE SIZE
+/config.json file 4.619KiB
+```
+
+Then we can start training by creating the `train_tts` pipeline with the [`train_tts.json` pipeline specification](train_tts.json):
+
+```sh
+$ pachctl create pipeline -f train_tts.json
+
+$ pachctl list job --no-pager --pipeline train_tts
+
+$ pachctl list job --no-pager --pipeline train_tts
+ID                               PIPELINE  STARTED     DURATION RESTART PROGRESS  DL UL STATE
+d34b3035736d48a98536365d19e76edf train_tts 5 hours ago -        0       0 + 0 / 1 0B 0B running
+``` 
+
+Once that finishes running, you should be able to view and download the checkpoints from the `train_tts` repo (the output repo from the `train_tts` pipeline):
+
+```sh
+$ blah
+```
+
+## 4. Try synthesizing speech with your new model!
 
 ## References
 
