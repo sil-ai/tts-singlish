@@ -158,6 +158,14 @@ $ blah
 
 Once you have completed the above pipeline (or if you already have a pre-trained model), you can use [this Google Colab notebook](https://colab.research.google.com/drive/1doD9XCtfF2enMV2UXohLQCeqMplDFUjh) to interatively synthesize speech. 
 
+## Ideas for improving the model/pipeline
+
+This is meant to be a demo pipeline and there could definitely be improvements if you actually wanted to utilize it in some system. Try:
+
+- Utilizing more than one speaker from IMDA, but all with the same gender and accent. Adding more data will likely allow the model to generalize beter.
+- Utilize a base model trained on more than one speaker/language.
+- Try mixed fine tuning by mixing the LJSpeech corpus with the data from IMDA.
+
 ## References
 
 - [Mozilla TTS (Tacotron2) Implementation](https://github.com/mozilla/TTS)
