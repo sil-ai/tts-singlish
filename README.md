@@ -8,6 +8,7 @@ After ensuring that you have the [pre-requisites](#pre-requisites), complete the
 
 1. [Prepare the input repository](#prepare_input_repository)
 2. [Select a speaker and pre-process the corresponding data]()
+3. [Train the TTS model]()
 
 ## Pre-requisites
 
@@ -72,7 +73,7 @@ $ python speaker_select.py \
 
 To run this in our Pachyderm cluster on the `corpus` repo we Dockerize the script with [this Dockerfile](speaker_select/Dockerfile). The resulting image is available publicly on Docker Hub as `dwhitena/tts-speaker-select`.
 
-Using that Docker image, we create the `speaker_select` pipeline in our Pachyderm cluster using `pachctl`:
+Using that Docker image, we create the `speaker_select` pipeline in our Pachyderm cluster using `pachctl` and the [`speaker_select.json` pipeline specification](speaker_select.json):
 
 ```sh
 $ pachctl create pipeline -f speaker_select.json
@@ -84,11 +85,41 @@ This will automatically trigger a "job" to process the corpus data and output th
 $ pachctl list job --no-pager --pipeline speaker_select
 ID                               PIPELINE       STARTED      DURATION   RESTART PROGRESS  DL       UL       STATE
 bcea6c90cb5a43e5b6f1cf6a206e50fa speaker_select 21 hours ago 15 seconds 0       1 + 0 / 1 79.46MiB 83.47KiB success
+
 $ pachctl list file speaker_select@master:/
 NAME             TYPE SIZE
 /SPEAKER3162.zip file 94.07MiB
 /metadata.csv    file 83.47KiB
 ```  
+
+Great! We now have our filtered corpus data. However, it is still in a `*.zip` file. To finish our pre-processing, we need to extract the WAV files from the zip file and organize them in the LJSpeech format. This is done with a second pipeline called `prep_audio`. `prep_audio` run the [`prep_audio.py` script](prep_audio/prep_audio.py) and is created using the [`prep_audio.json` pipeline specification](prep_audio.json):
+
+```sh
+$ pachctl create pipeline -f prep_audio.json
+
+$ pachctl list job --no-pager --pipeline prep_audio
+ID                               PIPELINE   STARTED      DURATION   RESTART PROGRESS  DL       UL       STATE
+4b3b251db5e54a8cbe76717d7b29884d prep_audio 20 hours ago 11 seconds 0       1 + 0 / 1 94.15MiB 122.7MiB success
+
+$ pachctl list file prep_audio@master:/
+NAME          TYPE SIZE
+/metadata.csv file 83.47KiB
+/wavs         dir  122.6MiB
+
+$ pachctl list file prep_audio@master:/wavs | head
+NAME                TYPE SIZE
+/wavs/031620002.wav file 152.5KiB
+/wavs/031620003.wav file 121.9KiB
+/wavs/031620004.wav file 201KiB
+/wavs/031620005.wav file 122.9KiB
+/wavs/031620006.wav file 71.57KiB
+/wavs/031620007.wav file 113.2KiB
+/wavs/031620008.wav file 110.7KiB
+/wavs/031620009.wav file 141.3KiB
+/wavs/031620010.wav file 128.2KiB
+```
+
+## 3. Train the TTS model
 
 ## References
 
