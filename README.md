@@ -156,6 +156,8 @@ $ blah
 
 ## 4. Try synthesizing speech with your new model!
 
+Once you have completed the above pipeline (or if you already have a pre-trained model), you can use [this Google Colab notebook](https://colab.research.google.com/drive/1doD9XCtfF2enMV2UXohLQCeqMplDFUjh) to interatively synthesize speech. 
+
 ## References
 
 - [Mozilla TTS (Tacotron2) Implementation](https://github.com/mozilla/TTS)
