@@ -1,0 +1,45 @@
+{
+  "pipeline": {
+    "name": "train_tts"
+  },
+  "description": "Trains the Tacotron2 model.",
+  "transform": {
+    "cmd": [ "bash" ],
+    "stdin": [
+      "mkdir data",
+      "cp -r /pfs/prep_audio/* data/",
+      "shuf data/metadata.csv > data/metadata_shuf.csv",
+      "head -n 794 data/metadata_shuf.csv > data/metadata_train.csv",
+      "tail -n 100 data/metadata_shuf.csv > data/metadata_val.csv",
+      "wget https://sfo2.digitaloceanspaces.com/imda-tts/best_model.pth.tar",
+      "cd TTS && python train.py --config_path /pfs/config/config.json --restore_path ../best_model.pth.tar"
+    ],
+    "image": "dwhitena/tts-train:2"
+  },
+  "resource_requests": {
+    "disk": "80G"
+  },
+  "resource_limits": {
+    "memory": "15G",
+    "gpu": {
+      "type": "nvidia.com/gpu",
+      "number": 1
+    }
+  },
+  "input": {
+    "cross": [
+      {
+        "pfs": {
+	  "repo": "prep_audio",
+          "glob": "/"
+        }
+      },
+      {
+        "pfs": {
+          "repo": "config",
+          "glob": "/"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "pipeline": {
+    "name": "speaker_select"
+  },
+  "description": "Select out files used for training and validation.",
+  "transform": {
+    "cmd": [ "bash" ],
+    "stdin": [
+      "python /code/speaker_select.py --docfile /pfs/speakers/speakers.XLSX --gender F --acc INDIAN --scriptdir /pfs/scripts/SCRIPT --wavdir /pfs/wavs/WAVE --numspeakers 1 --outdir /pfs/out/"
+    ],
+    "image": "dwhitena/tts-speaker-select"
+  },
+  "input": {
+    "cross": [
+      {
+        "pfs": {
+          "name": "speakers",
+	  "repo": "corpus",
+          "glob": "/speakers.XLSX"
+        }
+      },
+      {
+        "pfs": {
+          "name": "scripts",
+          "repo": "corpus",
+          "glob": "/SCRIPT/"
+        }
+      },
+      {
+        "pfs": {
+	  "name": "wavs",
+          "repo": "corpus",
+          "glob": "/WAVE/",
+	  "empty_files": true
+        }
+      }
+    ]
+  }
+}

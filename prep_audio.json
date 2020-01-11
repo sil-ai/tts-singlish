@@ -1,0 +1,20 @@
+{
+  "pipeline": {
+    "name": "prep_audio"
+  },
+  "description": "Extract audio files and arrange them for training.",
+  "transform": {
+    "cmd": [ "bash" ],
+    "stdin": [
+      "cp /pfs/speaker_select/metadata.csv /pfs/out/metadata.csv",
+      "python /code/prep_audio.py"
+    ],
+    "image": "dwhitena/tts-prep-audio:1"
+  },
+  "input": {
+    "pfs": {
+      "repo": "speaker_select",
+      "glob": "/"
+    }
+  }
+}
