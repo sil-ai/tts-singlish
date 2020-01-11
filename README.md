@@ -6,10 +6,10 @@ This data pipeline and the included notebooks demonstrate the fine tuning of a T
 
 After ensuring that you have the [pre-requisites](#pre-requisites), complete the following steps to deploy the Singlish pipeline:
 
-1. [Prepare the input repository](#prepare_input_repository)
-2. [Select a speaker and pre-process the corresponding data]()
-3. [Train the TTS model]()
-4. [Try using the TTS model to synthesize speech]()
+1. [Prepare the input repository](#1-prepare-input-repository)
+2. [Select a speaker and pre-process the corresponding data](#2-select-a-speaker-and-pre-process-the-corresponding-data)
+3. [Train the TTS model](#3-train-the-tts-model)
+4. [Try using the TTS model to synthesize speech](#4-try-synthesizing-speech-with-your-new-model)
 
 ## Pre-requisites
 
